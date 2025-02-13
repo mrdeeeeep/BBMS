@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="stock-title">
+        <h2>Blood Inventory Dashboard</h2>
+    </div>
+    <div class="blood-stock-grid">
+        {% for blood_type, stock in blood_stock.items() %}
+        <div class="blood-stock-card {% if stock.available <= 5 %}critical{% elif stock.available <= 10 %}low{% else %}good{% endif %}">
+            <div class="blood-type-header">
+                <span class="blood-type-label">{{ blood_type }}</span>
+                {% if stock.available <= 5 %}
+                <span class="stock-status critical">CRITICAL</span>
+                {% elif stock.available <= 10 %}
+                <span class="stock-status low">LOW</span>
+                {% else %}
+                <span class="stock-status good">GOOD</span>
+                {% endif %}
+            </div>
+            <div class="blood-stock-details">
+                <div class="stock-info">
+                    <div class="stock-number">{{ stock.available }}</div>
+                    <div class="stock-label">Units Available</div>
+                </div>
+                <div class="stock-meter">
+                    <div class="meter-fill" style="height: {{ (stock.available / 20) * 100 }}%"></div>
+                </div>
+            </div>
+            <div class="blood-stock-stats">
+                <div class="stat">
+                    <span class="stat-label">Total Donations:</span>
+                    <span class="stat-value">{{ stock.donations }}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total Requests:</span>
+                    <span class="stat-value">{{ stock.requests }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

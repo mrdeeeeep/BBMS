@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="team-title">
+        <h2 class="title-text">Project Team</h2>
+        <div class="title-underline"></div>
+    </div>
+    
+    <div class="project-info">
+        <h3>Blood Bank Management System</h3>
+        <p>Department of Computer Science & Engineering</p>
+    </div>
+
+    <div class="team-grid">
+        {% for member in team_members %}
+        <div class="team-member-card">
+            <div class="member-avatar">
+                {{ member.name[0] }}
+            </div>
+            <div class="member-info">
+                <h3 class="member-name">{{ member.name }}</h3>
+                <p class="member-roll">{{ member.roll_no }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

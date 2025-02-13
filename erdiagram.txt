@@ -1,0 +1,90 @@
+Blood Bank Management System - Database Schema
+
+Tables and Relationships:
+
+1. User Table
+---------------
+- id (Primary Key, Integer)
+- username (String, Unique, Not Null)
+- email (String, Unique, Not Null)
+- password_hash (String)
+- user_type (String, Not Null) [admin/donor/requester]
+
+2. BloodDonation Table
+----------------------
+- id (Primary Key, Integer)
+- donor_id (Foreign Key -> User.id, Not Null)
+- blood_type (String, Not Null)
+- quantity (Float, Not Null)
+- donation_date (DateTime, Default: Current Time)
+
+3. BloodRequest Table
+--------------------
+- id (Primary Key, Integer)
+- requester_id (Foreign Key -> User.id, Not Null)
+- blood_type (String, Not Null)
+- quantity (Float, Not Null)
+- urgency (String, Not Null) [high/medium/low]
+- status (String, Default: 'pending') [pending/approved/rejected]
+- request_date (DateTime, Default: Current Time)
+
+Relationships:
+-------------
+1. User (1) -> BloodDonation (Many)
+   - One user can make multiple donations
+   - Each donation belongs to one user
+   - Relationship through donor_id
+
+2. User (1) -> BloodRequest (Many)
+   - One user can make multiple requests
+   - Each request belongs to one user
+   - Relationship through requester_id
+
+Data Types:
+-----------
+- String: Variable length text
+- Integer: Whole numbers
+- Float: Decimal numbers
+- DateTime: Date and time stamps
+
+Constraints:
+-----------
+1. User Table:
+   - username must be unique
+   - email must be unique
+   - user_type must be one of: admin, donor, requester
+
+2. BloodDonation Table:
+   - quantity must be positive
+   - blood_type must be one of: A+, A-, B+, B-, AB+, AB-, O+, O-
+
+3. BloodRequest Table:
+   - quantity must be positive
+   - blood_type must be one of: A+, A-, B+, B-, AB+, AB-, O+, O-
+   - urgency must be one of: high, medium, low
+   - status must be one of: pending, approved, rejected
+
+Indexes:
+--------
+1. User Table:
+   - Primary Key: id
+   - Unique Index: username
+   - Unique Index: email
+
+2. BloodDonation Table:
+   - Primary Key: id
+   - Index: donor_id (for foreign key relationship)
+   - Index: blood_type (for frequent queries)
+
+3. BloodRequest Table:
+   - Primary Key: id
+   - Index: requester_id (for foreign key relationship)
+   - Index: blood_type (for frequent queries)
+   - Index: status (for filtering requests)
+
+Notes:
+------
+- All tables use INTEGER PRIMARY KEY for id fields (auto-incrementing)
+- Timestamps are automatically set for donation_date and request_date
+- Foreign key relationships ensure referential integrity
+- Indexes are added for frequently queried fields to improve performance 

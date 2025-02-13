@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="dashboard-header card">
+        <h2>Welcome, {{ current_user.username }}</h2>
+        <a href="{{ url_for('request_blood') }}" class="btn">New Request</a>
+    </div>
+
+    <div class="card">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ requests|length }}</div>
+                <div class="stat-label">Total Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {{ requests|selectattr('status', 'equalto', 'pending')|list|length }}
+                </div>
+                <div class="stat-label">Pending Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">
+                    {{ requests|selectattr('status', 'equalto', 'approved')|list|length }}
+                </div>
+                <div class="stat-label">Approved Requests</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Blood Type</th>
+                        <th>Quantity</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{ request.request_date.strftime('%Y-%m-%d') }}</td>
+                        <td><span class="blood-type">{{ request.blood_type }}</span></td>
+                        <td>{{ request.quantity }} units</td>
+                        <td>
+                            <span class="status status-{{ request.urgency }}">
+                                {{ request.urgency }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status status-{{ request.status }}">
+                                {{ request.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="no-data">No requests yet</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 
